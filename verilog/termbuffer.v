@@ -1,3 +1,5 @@
+`include "buffer.v"
+
 module termbuffer (
 	input	            clk,
 	input	            rst,
@@ -10,11 +12,21 @@ localparam REFRESH1 = 2'd1;
 localparam REFRESH2 = 2'd2;
 localparam REFRESH3 = 2'd3;
 
-reg [7:0]   buffer [0:1023];	// BRAM
 reg	[9:0]   cursor_ptr = 10'd0;
 reg         refresh = 0;
 reg [1:0]   refresh_state = REFRESH1;
 reg	[9:0]   buffer_ptr = 10'd0;
+reg         tb_wen = 0;
+reg [9:0]   tb_addr = 0;
+reg [7:0]   tb_wdata = 0;
+wire [7:0]  tb_rdata;
+
+buffer text_buffer0 (
+    .clk(clk),
+    .wen(tb_wen),
+    .addr(tb_addr),
+    .wdata(tb_wdata),
+    .rdata(tb_rdata));
 
 always @(posedge clk) begin
 	if (rst) begin
@@ -29,7 +41,9 @@ always @(posedge clk) begin
         end
         REFRESH2: begin
             buffer_ptr <= buffer_ptr + 1;
-            o_serial <= buffer[buffer_ptr];
+            tb_addr <= buffer_ptr;
+            tb_wen <= 0;
+            o_serial <= tb_rdata;
             o_serial_v <= 1;
             if (buffer_ptr == 10'd1023)
                 refresh_state <= REFRESH3;
@@ -45,22 +59,30 @@ always @(posedge clk) begin
         case (i_serial)
         "j": begin //down
             cursor_ptr <= cursor_ptr + 10'd40;
-            o_serial <= buffer[cursor_ptr];
+            tb_addr <= cursor_ptr;
+            tb_wen <= 0;
+            o_serial <= tb_rdata; // don't ya have to wait a clock?
             o_serial_v <= 1;
         end
         "k": begin //up
             cursor_ptr <= cursor_ptr - 10'd40;
-            o_serial <= buffer[cursor_ptr];
+            tb_addr <= cursor_ptr;
+            o_serial <= tb_rdata; // don't ya have to wait a clock?
+            tb_wen <= 0;
             o_serial_v <= 1;
         end
         "h": begin //left
             cursor_ptr <= cursor_ptr - 10'd1;
-            o_serial <= buffer[cursor_ptr];
+            tb_addr <= cursor_ptr;
+            tb_wen <= 0;
+            o_serial <= tb_rdata;
             o_serial_v <= 1;
         end
         "l": begin //right
             cursor_ptr <= cursor_ptr + 10'd1;
-            o_serial <= buffer[cursor_ptr];
+            tb_addr <= cursor_ptr;
+            tb_wen <= 0;
+            o_serial <= tb_rdata;
             o_serial_v <= 1;
         end
         " ": begin //right
@@ -73,7 +95,4 @@ always @(posedge clk) begin
     end // if
 end // always
 
-initial begin
-`include "buffer.v"
-end
 endmodule
