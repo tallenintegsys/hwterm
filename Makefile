@@ -4,9 +4,9 @@ DEVICE = 1k
 
 all: ${PROJ}.bin
 
-sim: termbuffer_tb.vcd
+sim: termbuffer_tb.vcd uart_tx_tb.vcd uart_rx_tb.vcd
 
-%.vvp: verilog/*_tb.v
+%.vvp: verilog/%.v
 	iverilog -I verilog $< -o $@
 
 %.vcd: %.vvp
@@ -27,7 +27,7 @@ prog:
 	iceprog ${PROJ}.bin
 
 clean:
-	rm -rf *.bin *.vvp *.vcd
+	rm -rf *.bin *.vvp *.vcd *.out
 
 old:
 	iverilog -I verilog -o uart_rx_tb.out verilog/uart_rx_tb.v
