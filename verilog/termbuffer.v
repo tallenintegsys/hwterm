@@ -23,7 +23,7 @@ initial begin
 `include "buffer.v"
 end
 
-reg	[9:0]   cursor_ptr = 0;
+reg	[9:0]   cursor_ptr = 10'd288;
 reg         refresh = 0;
 reg	[9:0]   refresh_ptr = 0;
 
@@ -65,30 +65,33 @@ always @(posedge clk) begin
                         cursor_ptr <= cursor_ptr + 10'd40;
                         buffer_addr <= cursor_ptr;
                         buffer_data <= buffer[buffer_addr];
+                        cmd_state <= CMD_S1;
                     end // j
                     "k": begin //up
                         cursor_ptr <= cursor_ptr - 10'd40;
                         buffer_addr <= cursor_ptr;
                         buffer_data <= buffer[buffer_addr];
+                        cmd_state <= CMD_S1;
                     end // k
                     "h": begin //left
                         cursor_ptr <= cursor_ptr - 10'd1;
                         buffer_addr <= cursor_ptr;
                         buffer_data <= buffer[buffer_addr];
+                        cmd_state <= CMD_S1;
                     end // h
                     "l": begin //right
                         cursor_ptr <= cursor_ptr + 10'd1;
                         buffer_addr <= cursor_ptr;
                         buffer_data <= buffer[buffer_addr];
+                        cmd_state <= CMD_S1;
                     end // l
-                    " ": begin //right
-                        refresh <= 1'd1;
-                    end // ""
+                    " ": begin //refresh
+                        //refresh <= 1'd1;
+                    end // " "
                     default: begin
-                            //do nothing
+                        //do nothing
                     end //default
                 endcase //i_serial
-                cmd_state <= CMD_S1;
             end // CMD_S0
             CMD_S1: begin
                 o_serial <= buffer_data;
