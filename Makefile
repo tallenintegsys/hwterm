@@ -1,4 +1,4 @@
-PROJ = hwterm
+PROJ = hwterm_top
 PCF = icestick.pcf
 DEVICE = 1k
 
@@ -18,8 +18,8 @@ sim: termbuffer_tb.vcd uart_tx_tb.vcd uart_rx_tb.vcd
 %.asc: %.json
 	nextpnr-ice40 --hx1k --package tq144 --json $< --pcf $(PCF) --asc $@
 
-%.json: verilog/*
-	yosys -p "read_verilog -Iverilog verilog/glitchGen_top.v; synth_ice40 -flatten -json $@"
+%.json: verilog/%.v
+	yosys -p "read_verilog -Iverilog $<; synth_ice40 -flatten -json $@"
 
 .PHONY: prog clean old
 

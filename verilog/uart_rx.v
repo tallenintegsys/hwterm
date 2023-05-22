@@ -9,7 +9,6 @@
 // Example: 10 MHz Clock, 115200 baud UART: (10000000)/(115200) = 87
 `ifndef UART_RX_H
 `define UART_RX_H
-`timescale 1ns / 1ps
 
 module uart_rx #(parameter CLKS_PER_BIT = 87) (
     input           i_Clock,
