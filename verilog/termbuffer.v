@@ -12,7 +12,7 @@ localparam REFRESH1 = 2'd1;
 localparam REFRESH2 = 2'd2;
 localparam REFRESH3 = 2'd3;
 
-reg	[9:0]   cursor_ptr = 10'd0;
+reg	[9:0]   cursor_ptr = 10'd288;
 reg         refresh = 0;
 reg [1:0]   refresh_state = REFRESH1;
 reg	[9:0]   buffer_ptr = 10'd0;
@@ -33,6 +33,10 @@ always @(posedge clk) begin
         cursor_ptr <= 0;
     end else if (o_serial_v) begin
         o_serial_v <= 0;
+    end else if (ready) begin
+        o_serial <= tb_rdata;
+        o_serial_v <= 1;
+        ready <= 0;
     end else if (refresh) begin
         case (refresh_state)
         REFRESH1: begin
@@ -43,8 +47,6 @@ always @(posedge clk) begin
             buffer_ptr <= buffer_ptr + 1;
             tb_addr <= buffer_ptr;
             tb_wen <= 0;
-            o_serial <= tb_rdata;
-            o_serial_v <= 1;
             if (buffer_ptr == 10'd1023)
                 refresh_state <= REFRESH3;
         end
@@ -61,37 +63,30 @@ always @(posedge clk) begin
             cursor_ptr <= cursor_ptr + 10'd40;
             tb_addr <= cursor_ptr;
             tb_wen <= 0;
-            o_serial <= tb_rdata; // don't ya have to wait a clock?
-            o_serial_v <= 1;
         end
         "k": begin //up
             cursor_ptr <= cursor_ptr - 10'd40;
             tb_addr <= cursor_ptr;
-            o_serial <= tb_rdata; // don't ya have to wait a clock?
             tb_wen <= 0;
-            o_serial_v <= 1;
         end
         "h": begin //left
             cursor_ptr <= cursor_ptr - 10'd1;
             tb_addr <= cursor_ptr;
             tb_wen <= 0;
-            o_serial <= tb_rdata;
-            o_serial_v <= 1;
         end
         "l": begin //right
             cursor_ptr <= cursor_ptr + 10'd1;
             tb_addr <= cursor_ptr;
             tb_wen <= 0;
-            o_serial <= tb_rdata;
-            o_serial_v <= 1;
         end
         " ": begin //right
-            refresh <= 1'd1;
+            //refresh <= 1'd1;
         end
         default: begin
                 //do nothing
         end
         endcase
+        ready <= 1;
     end // if
 end // always
 
