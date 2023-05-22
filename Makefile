@@ -18,8 +18,8 @@ sim: termbuffer_tb.vcd uart_tx_tb.vcd uart_rx_tb.vcd
 %.asc: %.json
 	nextpnr-ice40 --hx1k --package tq144 --json $< --pcf $(PCF) --asc $@
 
-%.json: verilog/%.v
-	yosys -p "read_verilog -Iverilog $<; synth_ice40 -flatten -json $@"
+%.json: verilog/*.v
+	yosys -p "read_verilog -Iverilog verilog/${PROJ}.v; synth_ice40 -flatten -json $@"
 
 .PHONY: prog clean old
 
@@ -27,7 +27,7 @@ prog:
 	iceprog ${PROJ}.bin
 
 clean:
-	rm -rf *.bin *.vvp *.vcd *.out
+	rm -rf *.bin *.vvp *.vcd *.out *.json
 
 old:
 	iverilog -I verilog -o uart_rx_tb.out verilog/uart_rx_tb.v
