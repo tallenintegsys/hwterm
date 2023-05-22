@@ -4,6 +4,14 @@ DEVICE = 1k
 
 all: ${PROJ}.bin
 
+sim: termbuffer_tb.vcd
+
+%.vvp: verilog/*_tb.v
+	iverilog -I verilog $< -o $@
+
+%.vcd: %.vvp
+	vvp $<
+
 %.bin: %.asc
 	icepack $< $@
 
@@ -13,15 +21,15 @@ all: ${PROJ}.bin
 %.json: verilog/*
 	yosys -p "read_verilog -Iverilog verilog/glitchGen_top.v; synth_ice40 -flatten -json $@"
 
-.PHONY: prog clean sim
+.PHONY: prog clean old
 
 prog:
 	iceprog ${PROJ}.bin
 
 clean:
-	rm -rf *.bin
+	rm -rf *.bin *.vvp *.vcd
 
-sim:
+old:
 	iverilog -I verilog -o uart_rx_tb.out verilog/uart_rx_tb.v
 	iverilog -I verilog -o uart_tx_tb.out verilog/uart_tx_tb.v
 	vvp uart_rx_tb.out
