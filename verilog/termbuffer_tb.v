@@ -5,8 +5,8 @@ reg         clk             = 0;
 reg         rst             = 0;
 wire [7:0]  o_serial;
 wire        o_serial_v;
-reg [7:0]   i_serial;
-reg         i_serial_v;
+reg [7:0]   i_serial = 0;
+reg         i_serial_v = 0;
 
 termbuffer uut (
     .clk,
@@ -15,17 +15,18 @@ termbuffer uut (
     .o_serial_v,
     .i_serial,
     .i_serial_v);
+
 integer i = 0;
 initial begin
     $dumpfile("termbuffer.vcd");
     $dumpvars;
     rst = 1;
-    #5 rst = 0;
-    #1 i_serial = "l";
+    #50 rst = 0;
+    #10 i_serial = "l";
     for (i=0; i < 1024; i = i + 1) begin
-        #1 i_serial_v = 1;
-        #1 i_serial_v = 0;
-        #2
+        #20 i_serial_v = 1;
+        #20 i_serial_v = 0;
+        while (o_serial_v == 0) #1;
         if (o_serial == 8'h1b)
             $write("%c%c%c",8'he2,8'h90,8'h9b);
         else if (o_serial == 8'h0d)
@@ -39,6 +40,7 @@ initial begin
         else
             $write("%c", o_serial);
     end
+    /*
     i_serial = " ";
     #1 i_serial_v = 1;
     #1 i_serial_v = 0;
@@ -57,12 +59,13 @@ initial begin
         else
             $write("%c", o_serial);
     end
+    */
     $display();
     $display("%c%c%c%c",8'hf0,8'h9f,8'h8d,8'hba);
     $finish;
 end // initial
 
 always begin
-    #1 clk = !clk;
+    #10 clk = !clk;
 end // always
 endmodule
