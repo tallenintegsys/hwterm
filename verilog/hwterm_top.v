@@ -1,7 +1,3 @@
-`include "termbuffer.v"
-`include "uart_rx.v"
-`include "uart_tx.v"
-
 module hwterm_top (
   input   CLK,      //12MHz oscillator
   output  D1,       // TXing
@@ -27,10 +23,10 @@ wire TX_Done;
 termbuffer termbuffer0 (
     .clk(CLK),
     .rst(rst),
-    .o_serial(TX_Byte),	// serial out
-    .o_serial_v(TX_dv),
-    .i_serial(RX_Byte),  // serial in
-    .i_serial_v(RX_dv));
+    .o_byte(TX_Byte),	// byte out
+    .o_byte_v(TX_dv),
+    .i_byte(RX_Byte),  // byte in
+    .i_byte_v(RX_dv));
 
 uart_rx #(.CLKS_PER_BIT(12000000/115200)) uart_rx0 (
     .i_Clock(CLK),

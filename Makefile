@@ -4,22 +4,14 @@ DEVICE = 1k
 
 all: ${PROJ}.bin
 
-sim: termbuffer_tb.vcd uart_tx_tb.vcd uart_rx_tb.vcd
-
-%.vvp: verilog/%.v
-	iverilog -I verilog $< -o $@
-
-%.vcd: %.vvp
-	vvp $<
-
 %.bin: %.asc
 	icepack $< $@
 
 %.asc: %.json
 	nextpnr-ice40 --hx1k --package tq144 --json $< --pcf $(PCF) --asc $@
 
-%.json: verilog/*.v
-	yosys -p "read_verilog -Iverilog verilog/${PROJ}.v; synth_ice40 -flatten -json $@"
+%.json: verilog/buffer.v verilog/hwterm_top.v verilog/termbuffer.v verilog/uart_rx.v verilog/uart_tx.v
+	yosys -p "read_verilog -Iverilog $^; synth_ice40 -flatten -json $@"
 
 .PHONY: prog clean old
 
@@ -28,6 +20,9 @@ prog:
 
 clean:
 	rm -rf *.bin *.vvp *.vcd *.out *.json
+
+vl:
+	verilator 
 
 old:
 	iverilog -I verilog -o uart_rx_tb.out verilog/uart_rx_tb.v

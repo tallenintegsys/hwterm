@@ -6,7 +6,7 @@ module buffer (
 
 reg [7:0] mem [0:1023];
 initial begin
-    `include "buffer_contents.v"
+    `include "buffer_contents.vh"
 end
 
 always @(posedge clk) begin
