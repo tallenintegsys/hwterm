@@ -13,7 +13,7 @@ all: ${PROJ}.bin
 %.json: verilog/buffer.v verilog/hwterm_top.v verilog/termbuffer.v verilog/uart_rx.v verilog/uart_tx.v
 	yosys -p "read_verilog -Iverilog $^; synth_ice40 -flatten -json $@"
 
-.PHONY: prog clean old
+.PHONY: prog clean sim
 
 prog:
 	iceprog ${PROJ}.bin
@@ -24,10 +24,6 @@ clean:
 vl:
 	verilator 
 
-old:
-	iverilog -I verilog -o uart_rx_tb.out verilog/uart_rx_tb.v
-	iverilog -I verilog -o uart_tx_tb.out verilog/uart_tx_tb.v
-	vvp uart_rx_tb.out
-	vvp uart_tx_tb.out
-	#gtkwave uart_rx.vcd
-	#gtkwave uart_tx.vcd
+sim:
+	iverilog -Iverilog -o termbuffer_tb.vvp test/termbuffer_tb.v verilog/termbuffer.v verilog/buffer.v
+	vvp termbuffer_tb.vvp
