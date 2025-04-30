@@ -25,7 +25,7 @@ localparam TX_STOP_BIT  = 3'b011;
 localparam CLEANUP      = 3'b100;
 
 reg [2:0]   r_SM_Main       = 0;
-reg [9:0]   r_Clock_Count   = 0;
+reg [15:0]  r_Clock_Count   = 0;
 reg [2:0]   r_Bit_Index     = 0;
 reg [7:0]   r_TX_Data       = 0;
 reg         r_TX_Done       = 0;
@@ -48,7 +48,7 @@ always @(posedge i_Clock) begin // Purpose: Control TX state machine
     TX_START_BIT : begin    // Send out Start Bit.
         o_TX_Serial <= 1'b0;    // Start bit = 0
         if (r_Clock_Count < CLKS_PER_BIT-1) begin   // Wait CLKS_PER_BIT-1 clocks for start bit to finish
-            r_Clock_Count <= r_Clock_Count + 10'd1;
+            r_Clock_Count <= r_Clock_Count + 16'd1;
             r_SM_Main <= TX_START_BIT;
         end else begin
             r_Clock_Count <= 0;
@@ -58,7 +58,7 @@ always @(posedge i_Clock) begin // Purpose: Control TX state machine
     TX_DATA_BITS : begin    // each bit lasts CLKS_PER_BIT clocks
         o_TX_Serial <= r_TX_Data[r_Bit_Index];
         if (r_Clock_Count < CLKS_PER_BIT-1) begin
-            r_Clock_Count <= r_Clock_Count + 10'd1;
+            r_Clock_Count <= r_Clock_Count + 16'd1;
             r_SM_Main <= TX_DATA_BITS;
         end else begin
             r_Clock_Count <= 0;
@@ -74,7 +74,7 @@ always @(posedge i_Clock) begin // Purpose: Control TX state machine
     TX_STOP_BIT : begin // Send out Stop bit.
         o_TX_Serial <= 1'b1;    // Stop bit = 1
         if (r_Clock_Count < CLKS_PER_BIT-1) begin // Wait CLKS_PER_BIT-1 clocks for Stop bit to finish
-            r_Clock_Count <= r_Clock_Count + 10'd1;
+            r_Clock_Count <= r_Clock_Count + 16'd1;
             r_SM_Main <= TX_STOP_BIT;
         end else begin
             r_TX_Done <= 1'b1;
@@ -85,7 +85,7 @@ always @(posedge i_Clock) begin // Purpose: Control TX state machine
     end // case: TX_STOP_BIT
     CLEANUP : begin // Stay here 1 clock
         if (r_Clock_Count < CLKS_PER_BIT-1) begin   // Wait CLKS_PER_BIT-1 clocks for start bit to finish
-            r_Clock_Count <= r_Clock_Count + 10'd1;
+            r_Clock_Count <= r_Clock_Count + 16'd1;
 		end else begin
 			r_TX_Done <= 1'b1;
             r_Clock_Count <= 0;
