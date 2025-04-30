@@ -83,8 +83,8 @@ always @(posedge i_Clock) begin // Purpose: Control TX state machine
             r_TX_Active <= 1'b0;
         end
     end // case: TX_STOP_BIT
-    CLEANUP : begin // Stay here 1 clock
-        if (r_Clock_Count < CLKS_PER_BIT-1) begin   // Wait CLKS_PER_BIT-1 clocks for start bit to finish
+    CLEANUP : begin // Stay here CLKS_PER_BIT clocks
+        if (r_Clock_Count < CLKS_PER_BIT-1) begin   // Wait CLKS_PER_BIT-1 clocks
             r_Clock_Count <= r_Clock_Count + 16'd1;
 		end else begin
 			r_TX_Done <= 1'b1;
