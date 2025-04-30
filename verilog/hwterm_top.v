@@ -36,13 +36,13 @@ termbuffer termbuffer0 (
     .i_byte(RX_Byte),  // byte in
     .i_byte_v(RX_dv));
 
-uart_rx #(.CLKS_PER_BIT(12000000/9600)) uart_rx0 (
+uart_rx #(.CLKS_PER_BIT(12000000/300)) uart_rx0 (
     .i_Clock(CLK),
     .i_RX_Serial(rx),
     .o_RX_DV(RX_dv),
     .o_RX_Byte(RX_Byte));
 
-uart_tx #(.CLKS_PER_BIT(12000000/9600)) uart_tx0 (
+uart_tx #(.CLKS_PER_BIT(12000000/300)) uart_tx0 (
     .i_Clock(CLK),
     .i_TX_DV(TX_dv),
     .i_TX_Byte(TX_Byte),

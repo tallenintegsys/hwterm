@@ -4,7 +4,7 @@ module buffer (
     input [7:0] wdata,
     output reg [7:0] rdata);
 
-reg [7:0] mem [0:1023];
+reg [7:0] mem [1023:0];
 initial begin
     `include "buffer_contents.vh"
 end

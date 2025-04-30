@@ -23,7 +23,11 @@ localparam REFRESH0 = 0;
 localparam REFRESH1 = 1;
 localparam REFRESH2 = 2;
 localparam REFRESH3 = 3;
-reg [1:0] refresh = REFRESH0;
+localparam REFRESH4 = 4;
+localparam REFRESH5 = 5;
+localparam REFRESH6 = 6;
+localparam REFRESH7 = 7;
+reg [2:0] refresh = REFRESH0;
 
 localparam TAB0 = 0;
 localparam TAB1 = 1;
@@ -85,20 +89,31 @@ always @(posedge clk) begin
         case (refresh)
 		REFRESH0: begin
 			o_byte <= tb_rdata;
+			o_byte_v <= 1;
 			refresh <= REFRESH1;
 		end
 		REFRESH1: begin
-			o_byte_v <= 1;
-			if (i_tx_done) refresh <= REFRESH2;
+			o_byte_v <= 0;
+			refresh <= REFRESH2;
 		end
 		REFRESH2: begin
-			o_byte_v <= 0;
-			refresh <= REFRESH3;
+			if (i_tx_done) refresh <= REFRESH3;
 		end
 		REFRESH3: begin
 			tb_addr <= tb_addr + 1;
+			refresh <= REFRESH4;
+		end
+		REFRESH4: begin
+			refresh <= REFRESH5;
+		end
+		REFRESH5: begin
+			refresh <= REFRESH6;
+		end
+		REFRESH6: begin
+			refresh <= REFRESH7;
+		end
+		REFRESH7: begin
 			refresh <= REFRESH0;
-			if (tb_addr == 271) tb_addr = 0;
 		end
 		default: begin
 			refresh <= REFRESH0;

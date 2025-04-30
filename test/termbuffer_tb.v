@@ -4,7 +4,7 @@ reg         clk             = 0;
 reg         rst             = 0;
 wire [7:0]  o_byte;
 wire        o_byte_v;
-reg         i_byte_done = 0;
+reg         i_tx_done = 0;
 reg [7:0]   i_byte = 0;
 reg         i_byte_v = 0;
 
@@ -13,7 +13,7 @@ termbuffer uut (
     .rst,
     .o_byte,
     .o_byte_v,
-    .i_byte_done,
+    .i_tx_done,
     .i_byte,
     .i_byte_v);
 
@@ -36,8 +36,8 @@ initial begin
         else if (o_byte == 8'h20) $write("%c", o_byte);
         else if (o_byte < "0") $write("%x", o_byte);
         else $write("%c", o_byte);
-        #10 i_byte_done = 1;
-        #10 i_byte_done = 0;
+        #10 i_tx_done = 1;
+        #10 i_tx_done = 0;
     end
 */
     i_byte = " ";
@@ -52,8 +52,8 @@ initial begin
         else if (o_byte == 8'h20) $write("%c", o_byte);
         else if (o_byte < "0") $write("%x", o_byte);
         else $write("%c", o_byte);
-        #10 i_byte_done = 1;
-        #10 i_byte_done = 0;
+        #10 i_tx_done = 1;
+        #10 i_tx_done = 0;
     end
 
     $display();
