@@ -1,14 +1,20 @@
 module hwterm_top (
   input   CLK,      //12MHz oscillator
-  output  D1,       // TXing
-  output  D5,       // RXing  
-  output  PMOD9,    // TX
-  input   PMOD10);  // RX
+  output  D1,
+  output  D2,
+  output  D3,
+  output  D4,
+  output  D5,
+  output  TX,   // TX
+  input   RX);  // RX
 
-assign D1 = TX_Active;
-assign D5 = RX_dv;
-assign PMOD9 = tx;
-assign rx = PMOD10;
+assign D1 = TX_dv;
+assign D2 = TX_Active;
+assign D3 = o_TX_Done;
+assign D4 = ~tx;
+assign D5 = ~RX;
+assign TX = tx;
+assign rx = RX;
 
 reg rst = 0;
 wire [7:0] TX_Byte;
@@ -25,6 +31,8 @@ termbuffer termbuffer0 (
     .rst(rst),
     .o_byte(TX_Byte),	// byte out
     .o_byte_v(TX_dv),
+	.i_tx_active(TX_Active),
+	.i_tx_done(TX_Done),
     .i_byte(RX_Byte),  // byte in
     .i_byte_v(RX_dv));
 

@@ -11,6 +11,6 @@ end
 
 always @(posedge clk) begin
     if (wen) mem[addr] <= wdata;
-    rdata <= mem[addr];
+    else rdata <= mem[addr];
 end
 endmodule
