@@ -77,7 +77,6 @@ always @(posedge i_Clock) begin // Purpose: Control TX state machine
             r_Clock_Count <= r_Clock_Count + 16'd1;
             r_SM_Main <= TX_STOP_BIT;
         end else begin
-            r_TX_Done <= 1'b1;
             r_Clock_Count <= 0;
             r_SM_Main <= CLEANUP;
             r_TX_Active <= 1'b0;
