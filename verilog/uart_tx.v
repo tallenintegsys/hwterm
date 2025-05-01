@@ -1,8 +1,9 @@
 //////////////////////////////////////////////////////////////////////
-// File Downloaded from http://www.nandland.com
+// Based on file Downloaded from http://www.nandland.com
 //////////////////////////////////////////////////////////////////////
 // This file contains the UART Transmitter. This transmitter is N,8,1
-// When tx is complete o_Tx_done will be driven high for _one_ clock.
+// When tx is complete o_Tx_done will be driven high for _one_ clock
+// period.
 //
 // Set Parameter CLKS_PER_BIT as follows:
 // CLKS_PER_BIT = (Frequency of i_Clock)/(Frequency of UART)

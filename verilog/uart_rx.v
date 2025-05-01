@@ -1,8 +1,9 @@
 //////////////////////////////////////////////////////////////////////
-// File Downloaded from http://www.nandland.com
+// Based on file Downloaded from http://www.nandland.com
 //////////////////////////////////////////////////////////////////////
-// This file contains the UART Receiver. This receiver is able to receive 8 bits of serial data, one start bit,
-// one stop bit, and no parity bit. When RX is complete o_RX_DV will be driven high for _one_ clock cycle.
+// This file contains the UART Receiver. This receiver is able to receive 8 bits of
+// serial data, one start bit, one stop bit, and no parity bit. When RX is complete
+// o_RX_DV will be driven high for _one_ clock period.
 //
 // Set Parameter CLKS_PER_BIT as follows:
 // CLKS_PER_BIT = (Frequency of i_Clock)/(Frequency of UART)
@@ -10,7 +11,7 @@
 `ifndef UART_RX_H
 `define UART_RX_H
 
-module uart_rx #(parameter CLKS_PER_BIT = 87) (
+module uart_rx #(parameter CLKS_PER_BIT = 217) (
     input           i_Clock,
     input           i_RX_Serial,
     output          o_RX_DV,
@@ -25,7 +26,7 @@ parameter s_CLEANUP          = 3'b100;
 reg r_RX_Data_R = 1'b1;
 reg r_RX_Data   = 1'b1;
 
-reg [7:0]   r_Clock_Count   = 0; //XXX make bigger for fast clocks
+reg [15:0]  r_Clock_Count   = 0;
 reg [2:0]   r_Bit_Index     = 0; //8 bits total
 reg [7:0]   r_RX_Byte       = 0;
 reg         r_RX_DV         = 0;
