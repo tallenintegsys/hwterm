@@ -94,7 +94,10 @@ always @(posedge clk) begin
 		end
 		REFRESH1: begin
 			o_byte_v <= 0;
-			refresh <= REFRESH2;
+			if (i_tx_done) begin
+				refresh <= REFRESH0;
+				tb_addr <= tb_addr + 1;
+			end
 		end
 		REFRESH2: begin
 			if (i_tx_done) refresh <= REFRESH3;
@@ -128,7 +131,7 @@ always @(posedge clk) begin
         end
         TAB1: begin
             o_byte_v <= 0;
-            tab <= TAB2;
+            if (i_tx_done) tab <= TAB2;
         end
         TAB2: begin
             o_byte <= "[";
@@ -137,7 +140,7 @@ always @(posedge clk) begin
         end
         TAB3: begin
             o_byte_v <= 0;
-            tab <= TAB4;
+            if (i_tx_done) tab <= TAB4;
         end
         TAB4: begin
             o_byte <= "\033";
@@ -146,7 +149,7 @@ always @(posedge clk) begin
         end
         TAB5: begin
             o_byte_v <= 0;
-            tab <= TAB6;
+            if (i_tx_done) tab <= TAB6;
         end
         TAB6: begin
             o_byte <= "\033";
@@ -155,7 +158,7 @@ always @(posedge clk) begin
         end
         TAB7: begin
             o_byte_v <= 0;
-            tab <= TAB8;
+            if (i_tx_done) tab <= TAB8;
         end
         TAB8: begin
             o_byte <= "\033";
@@ -164,7 +167,7 @@ always @(posedge clk) begin
         end
         TAB9: begin
             o_byte_v <= 0;
-            tab <= TAB10;
+            if (i_tx_done) tab <= TAB10;
         end
         TAB10: begin
             o_byte <= "\033";
@@ -173,7 +176,7 @@ always @(posedge clk) begin
         end
         TAB11: begin
             o_byte_v <= 0;
-            tab <= TAB2;
+            if (i_tx_done) tab <= TAB2;
         end
         endcase
     end else if (i_byte_v) begin
