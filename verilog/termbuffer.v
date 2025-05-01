@@ -21,13 +21,7 @@ reg [1:0] cursor = CURSOR0;
 
 localparam REFRESH0 = 0;
 localparam REFRESH1 = 1;
-localparam REFRESH2 = 2;
-localparam REFRESH3 = 3;
-localparam REFRESH4 = 4;
-localparam REFRESH5 = 5;
-localparam REFRESH6 = 6;
-localparam REFRESH7 = 7;
-reg [2:0] refresh = REFRESH0;
+reg refresh = REFRESH0;
 
 localparam TAB0 = 0;
 localparam TAB1 = 1;
@@ -98,28 +92,6 @@ always @(posedge clk) begin
 				refresh <= REFRESH0;
 				tb_addr <= tb_addr + 1;
 			end
-		end
-		REFRESH2: begin
-			if (i_tx_done) refresh <= REFRESH3;
-		end
-		REFRESH3: begin
-			tb_addr <= tb_addr + 1;
-			refresh <= REFRESH4;
-		end
-		REFRESH4: begin
-			refresh <= REFRESH5;
-		end
-		REFRESH5: begin
-			refresh <= REFRESH6;
-		end
-		REFRESH6: begin
-			refresh <= REFRESH7;
-		end
-		REFRESH7: begin
-			refresh <= REFRESH0;
-		end
-		default: begin
-			refresh <= REFRESH0;
 		end
 		endcase
     end else if (cmd == CMD_TAB) begin
