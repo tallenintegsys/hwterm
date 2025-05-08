@@ -122,43 +122,43 @@ always @(posedge clk) begin
 			end
 		end
         REFRESH2: begin
-            tb_addr <= 10'd156;
+            tb_addr <= 10'd155;
             `BCD_TO_ASCII(delay_width, tb_wdata, 31, 28);
             tb_wen <= 1;
             refresh <= REFRESH3;
         end
         REFRESH3: begin
-            tb_addr <= 10'd157;
+            tb_addr <= 10'd156;
             `BCD_TO_ASCII(delay_width, tb_wdata, 27, 24);
             refresh <= REFRESH4;
         end
         REFRESH4: begin
-            tb_addr <= 10'd158;
+            tb_addr <= 10'd157;
             `BCD_TO_ASCII(delay_width, tb_wdata, 23, 20);
             refresh <= REFRESH5;
         end
         REFRESH5: begin
-            tb_addr <= 10'd159;
+            tb_addr <= 10'd158;
             `BCD_TO_ASCII(delay_width, tb_wdata, 19, 16);
             refresh <= REFRESH6;
         end
         REFRESH6: begin
-            tb_addr <= 10'd160;
+            tb_addr <= 10'd159;
             `BCD_TO_ASCII(delay_width, tb_wdata, 15, 12);
             refresh <= REFRESH7;
         end
         REFRESH7: begin
-            tb_addr <= 10'd161;
+            tb_addr <= 10'd160;
             `BCD_TO_ASCII(delay_width, tb_wdata, 11, 8);
             refresh <= REFRESH8;
         end
         REFRESH8: begin
-            tb_addr <= 10'd162;
+            tb_addr <= 10'd161;
             `BCD_TO_ASCII(delay_width, tb_wdata, 7, 4);
             refresh <= REFRESH9;
         end
         REFRESH9: begin
-            tb_addr <= 10'd163;
+            tb_addr <= 10'd162;
             `BCD_TO_ASCII(delay_width, tb_wdata, 3, 0);
             refresh <= REFRESH10;
         end
