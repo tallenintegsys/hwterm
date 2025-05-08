@@ -6,24 +6,25 @@ import os
 # a BRAM. This bit of Python nonsense converts a text file to a bunch
 # verilog 
 
-# v stands for verilog
-class v:
-    arrayName = "verilog_array_name"       # varilog array we are populating
+class verilog:
+    arrayName:str = ''                     # varilog array we are populating
     i = 0                                  # the element in the array
 
-    def p(char):
-        print("{}[{}] = \"{}\";".format(v.arrayName, v.i, char))
-        v.i += 1
+    def __init__(self, arrayName: str):
+        self.arrayName = arrayName
+
+    def p(self, char):
+        print(f"{self.arrayName}[{self.i}] = \"{char}\";")
+        self.i += 1
 
 
 def main() -> int:
-    if (len(sys.argv) != 2):
-        print("{}: Opens a file [array name].txt and writes verilog statements to stdout".format(sys.argv[0]))
-        print("the varilog statements are suitable to populate an array in an initial block.")
-        print("usage: {} [array name]".format(sys.argv[0]))
+    if (len(sys.argv) != 3):
+        print(f"usage: {sys.argv[0]} arrayname filename: Opens a file name and writes verilog statements to stdout")
+        print("the varilog statements are suitable to populate a verilog array named arrayname, in an initial block.")
         exit(1)
-    v.arrayName = os.path.splitext(sys.argv[1])[0]
-    f = open("{}.txt".format(v.arrayName))
+    v = verilog(sys.argv[1])
+    f = open(sys.argv[2])
     esc = False
     while 1:
         # read by character
