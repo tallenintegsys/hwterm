@@ -1,3 +1,10 @@
+`define BCD_TO_ASCII(in, out, bitH, bitL) begin \
+	if (in[bitH:bitL] < 4'ha)                   \
+		out <= {4'd0, in[bitH:bitL]} + 8'h30;   \
+	else                                        \
+		out <= {4'd0, in[bitH:bitL]} + 8'h57;   \
+end
+		
 module termbuffer (
 	input	            clk,
 	input	            rst,
@@ -22,7 +29,16 @@ reg [1:0] cursor = CURSOR0;
 
 localparam REFRESH0 = 0;
 localparam REFRESH1 = 1;
-reg refresh = REFRESH0;
+localparam REFRESH2 = 2;
+localparam REFRESH3 = 3;
+localparam REFRESH4 = 4;
+localparam REFRESH5 = 5;
+localparam REFRESH6 = 6;
+localparam REFRESH7 = 7;
+localparam REFRESH8 = 8;
+localparam REFRESH9 = 9;
+localparam REFRESH10 = 10;
+reg [3:0] refresh = REFRESH0;
 
 localparam TAB0 = 0;
 localparam TAB1 = 1;
@@ -59,6 +75,10 @@ buffer text_buffer0 (
 
 reg	 [9:0]cursor_ptr = 10'd288;
 reg  [2:0]send = 0;
+
+// data to be displayed
+reg  [31:0]delay_width = 32'hb16b00b5;
+reg  [31:0]pulse_width = 32'hfeedcafe;
 
 always @(posedge clk) begin
         /* verilator lint_off STMTDLY */
@@ -97,10 +117,56 @@ always @(posedge clk) begin
 			o_byte_v <= 0;
 			if (i_tx_done) begin
                 tb_addr <= tb_addr + 1;
-				refresh <= REFRESH0;
-				if (tb_addr == 0) cmd <= CMD_NONE;
+                if (tb_addr == 10'd1022) refresh <= REFRESH2;
+				else refresh <= REFRESH0;
 			end
 		end
+        REFRESH2: begin
+            tb_addr <= 10'd156;
+            `BCD_TO_ASCII(delay_width, tb_wdata, 31, 28);
+            tb_wen <= 1;
+            refresh <= REFRESH3;
+        end
+        REFRESH3: begin
+            tb_addr <= 10'd157;
+            `BCD_TO_ASCII(delay_width, tb_wdata, 27, 24);
+            refresh <= REFRESH4;
+        end
+        REFRESH4: begin
+            tb_addr <= 10'd158;
+            `BCD_TO_ASCII(delay_width, tb_wdata, 23, 20);
+            refresh <= REFRESH5;
+        end
+        REFRESH5: begin
+            tb_addr <= 10'd159;
+            `BCD_TO_ASCII(delay_width, tb_wdata, 19, 16);
+            refresh <= REFRESH6;
+        end
+        REFRESH6: begin
+            tb_addr <= 10'd160;
+            `BCD_TO_ASCII(delay_width, tb_wdata, 15, 12);
+            refresh <= REFRESH7;
+        end
+        REFRESH7: begin
+            tb_addr <= 10'd161;
+            `BCD_TO_ASCII(delay_width, tb_wdata, 11, 8);
+            refresh <= REFRESH8;
+        end
+        REFRESH8: begin
+            tb_addr <= 10'd162;
+            `BCD_TO_ASCII(delay_width, tb_wdata, 7, 4);
+            refresh <= REFRESH9;
+        end
+        REFRESH9: begin
+            tb_addr <= 10'd163;
+            `BCD_TO_ASCII(delay_width, tb_wdata, 3, 0);
+            refresh <= REFRESH10;
+        end
+        REFRESH10: begin
+            tb_addr <= 4;
+            tb_wen <= 0;
+            refresh <= REFRESH0;
+        end
 		endcase
     end else if (cmd == CMD_TAB) begin
         case (tab)

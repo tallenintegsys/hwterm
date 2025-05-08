@@ -1,7 +1,8 @@
-                         ______________   
-                        |     pulse    |  
-   delay  width         |     width    |  
-      [48;5;233m  b16b00b5  [m ns   | [48;5;233m  b00bb00b  [m |ns  
+[2J                         ______________   
+          delay         |     pulse    |  
+          width         |     width    |  
+      [48;5;233m  12345678  [m ns   | [48;5;233m  09876543  [m |ns  
 ________________________|              |__
-
- tab=field space=redraw enter=trigger   
+                                          
+  tab=field space=redraw enter=trigger    
+[1;1H
