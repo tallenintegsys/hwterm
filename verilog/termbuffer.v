@@ -13,7 +13,7 @@ localparam CMD_CURSOR = 1;
 localparam CMD_REFRESH = 2;
 localparam CMD_TAB = 3;
 localparam CMD_ECHO = 4;
-reg [2:0] cmd = CMD_ECHO;
+reg [2:0] cmd = CMD_REFRESH;
 
 localparam CURSOR0 = 0;
 localparam CURSOR1 = 1;
@@ -96,8 +96,8 @@ always @(posedge clk) begin
 		REFRESH1: begin
 			o_byte_v <= 0;
 			if (i_tx_done) begin
+                tb_addr <= tb_addr + 1;
 				refresh <= REFRESH0;
-				tb_addr <= tb_addr + 1;
 				if (tb_addr == 0) cmd <= CMD_NONE;
 			end
 		end
