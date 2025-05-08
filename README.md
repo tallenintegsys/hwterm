@@ -15,4 +15,4 @@ For now.
 ```
 ...a later goal is to integrate the USB/UART into the FPGA based tool.
 ### Example UI
-need to add a picture
+![UI in a terminal(screen)](doc/Screenshot.png) 
