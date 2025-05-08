@@ -1,12 +1,13 @@
 #!/bin/bash
 
-echo -e "                         ____________   "
-echo -e "                        |   pulse    |  "
-echo -e "   delay  width         |   width    |  "
-echo -e " \e[100m                 \e[m ns   | \e[100m        \e[m ns|  "
-echo -e "________________________|            |__"
+echo -e "                         ______________   "
+echo -e "                        |     pulse    |  "
+echo -e "   delay  width         |     width    |  "
+echo -e "      \e[48;5;233m  b16b00b5  \e[m ns   | \e[48;5;233m  b00bb00b  \e[m |ns  "
+echo -e "________________________|              |__"
 echo
 echo -e " tab=field space=redraw enter=trigger   "
+exit 0
 echo -en "\e[4A\e[3G\e[100m"
 read -n13 
 echo -e "\e[m"
