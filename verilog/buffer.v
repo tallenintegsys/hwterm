@@ -1,6 +1,7 @@
 module buffer (
-    input clk, wen,
-    input [9:0] addr,
+    input clk, ren, wen,
+	input [9:0] raddr,
+    input [9:0] waddr,
     input [7:0] wdata,
     output reg [7:0] rdata);
 
@@ -10,7 +11,10 @@ initial begin
 end
 
 always @(posedge clk) begin
-    if (wen) mem[addr] <= wdata;
-    else rdata <= mem[addr];
+    if (ren) rdata <= mem[raddr];
+end
+
+always @(posedge clk) begin
+    if (wen) mem[waddr] <= wdata;
 end
 endmodule

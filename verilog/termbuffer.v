@@ -8,7 +8,7 @@ end
 module termbuffer (
 	input	            clk,
 	input	            rst,
-	input				div,
+	input [7:0]			div,
 	output reg [7:0]    o_byte,	// serial out
     output reg          o_byte_v,
 	input				i_tx_active,
@@ -69,10 +69,12 @@ wire [7:0]tb_rdata;
 
 buffer text_buffer0 (
     .clk(clk),
+	.ren(1),
     .wen(tb_wen),
-    .addr(tb_addr),
-    .wdata(tb_wdata),
-    .rdata(tb_rdata));
+    .raddr(tb_addr),
+    .waddr(tb_addr),
+	.rdata(tb_rdata),
+    .wdata(tb_wdata));
 
 reg	 [9:0]cursor_ptr = 10'd288;
 reg  [2:0]send = 0;
