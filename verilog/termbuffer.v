@@ -8,6 +8,7 @@ end
 module termbuffer (
 	input	            clk,
 	input	            rst,
+	input				div,
 	output reg [7:0]    o_byte,	// serial out
     output reg          o_byte_v,
 	input				i_tx_active,
@@ -77,9 +78,9 @@ reg	 [9:0]cursor_ptr = 10'd288;
 reg  [2:0]send = 0;
 
 // data to be displayed
-reg  [31:0]delay_width = 32'hb16b00b5;
-reg  [31:0]pulse_width = 32'hfeedcafe;
-
+reg  [31:0]delay_width	= 32'hb16b00b5;
+reg  [31:0]pulse_width	= 32'h31337000;
+reg  [31:0]num			= 32'd20000;
 always @(posedge clk) begin
         /* verilator lint_off STMTDLY */
         #1;
@@ -112,6 +113,7 @@ always @(posedge clk) begin
 			o_byte <= tb_rdata;
 			o_byte_v <= 1;
 			refresh <= REFRESH1;
+			delay_width = num / div;
 		end
 		REFRESH1: begin
 			o_byte_v <= 0;

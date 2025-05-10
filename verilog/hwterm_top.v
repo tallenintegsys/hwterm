@@ -5,6 +5,14 @@ module hwterm_top (
   output  D3,
   output  D4,
   output  D5,
+  input   TR3,
+  input   TR4,
+  input   TR5,
+  input   TR6,
+  input   TR7,
+  input   TR8,
+  input   TR9,
+  input   TR10,
   output  TX,   // TX
   input   RX);  // RX
 
@@ -15,6 +23,7 @@ assign D4 = ~tx;
 assign D5 = ~RX;
 assign TX = tx;
 assign rx = RX;
+assign div = {TR3,TR4,TR5,TR6,TR7,TR8,TR9,TR10};
 
 reg rst = 0;
 wire [7:0] TX_Byte;
@@ -25,10 +34,12 @@ wire rx;
 wire tx;
 wire TX_Active;
 wire TX_Done;
+wire [7:0]div;
 
 termbuffer termbuffer0 (
     .clk(CLK),
     .rst(rst),
+	.div(div),
     .o_byte(TX_Byte),	// byte out
     .o_byte_v(TX_dv),
 	.i_tx_active(TX_Active),
